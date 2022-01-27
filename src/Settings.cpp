@@ -225,6 +225,8 @@ QVariant Settings::getDefaultValue(const std::string& group, const std::string& 
             return true;
         if(name == "editor_word_wrap")
             return true;
+        if(name == "viewer_fit_image")
+            return true;
         if(name == "null_text")
             return "NULL";
         if(name == "blob_text")
