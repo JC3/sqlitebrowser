@@ -97,7 +97,11 @@ EditDialog::EditDialog(QWidget* parent)
     ui->actionWordWrap->setChecked(Settings::getValue("databrowser", "editor_word_wrap").toBool());
     setWordWrapping(ui->actionWordWrap->isChecked());
 
+    ui->actionFitImage->setChecked(Settings::getValue("databrowser", "viewer_fit_image").toBool());
+    setFitImage(ui->actionFitImage->isChecked());
+
     reloadSettings();
+    editModeChanged(ui->comboMode->currentIndex()); // to init ui element visibility / enable states
 }
 
 EditDialog::~EditDialog()
@@ -105,6 +109,7 @@ EditDialog::~EditDialog()
     Settings::setValue("databrowser", "indent_compact",  mustIndentAndCompact);
     Settings::setValue("databrowser", "auto_switch_mode", ui->buttonAutoSwitchMode->isChecked());
     Settings::setValue("databrowser", "editor_word_wrap", ui->actionWordWrap->isChecked());
+    Settings::setValue("databrowser", "viewer_fit_image", ui->actionFitImage->isChecked());
     delete ui;
 }
 
@@ -751,6 +756,9 @@ void EditDialog::setDataInBuffer(const QByteArray& bArrdata, DataSources source)
 void EditDialog::editModeChanged(int newMode)
 {
     ui->actionIndent->setEnabled(newMode == JsonEditor || newMode == XmlEditor);
+    ui->actionFitImage->setVisible(newMode == ImageViewer);
+    ui->actionWordWrap->setVisible(newMode != ImageViewer);
+    ui->actionIndent->setVisible(newMode != ImageViewer);
     setStackCurrentIndex(newMode);
 
     // * If the dataSource is the text buffer, the data is always text *
@@ -1177,6 +1185,16 @@ void EditDialog::setWordWrapping(bool value)
     // Set wrap lines
     sciEdit->setWrapMode(value ? QsciScintilla::WrapWord : QsciScintilla::WrapNone);
     ui->qtEdit->setWordWrapMode(value ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
+}
+
+void EditDialog::setFitImage(bool value)
+{
+    // Quick implementation ignores image aspect ratio.
+    // TODO: Subclass the label, or use a different widget, or use a custom layout, or paint from parent.
+    ui->editorImage->setScaledContents(value);
+    ui->editorImage->setSizePolicy(value ? QSizePolicy::Ignored : QSizePolicy::Preferred,
+                                   value ? QSizePolicy::Ignored : QSizePolicy::Preferred);
+    ui->editorImageScrollArea->setSizeAdjustPolicy(value ? QScrollArea::AdjustToContents : QScrollArea::AdjustIgnored);
 }
 
 void EditDialog::openDataWithExternal()

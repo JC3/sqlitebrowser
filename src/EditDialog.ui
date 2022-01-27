@@ -120,6 +120,7 @@
      </item>
      <item>
       <widget class="QToolBar" name="editCellToolbar">
+       <addaction name="actionFitImage"/>
        <addaction name="actionWordWrap"/>
        <addaction name="actionIndent"/>
        <addaction name="actionImport"/>
@@ -461,6 +462,21 @@ Errors are indicated with a red squiggle underline.</string>
     <string>Open in external application</string>
    </property>
   </action>
+  <action name="actionFitImage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icons/fit_image</normaloff>:/icons/fit_image</iconset>
+   </property>
+   <property name="text">
+    <string>Fit image in viewer</string>
+   </property>
+   <property name="toolTip">
+    <string>Scale image to fit in the viewer</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>comboMode</tabstop>
@@ -679,6 +695,22 @@ Errors are indicated with a red squiggle underline.</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFitImage</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>EditDialog</receiver>
+   <slot>setFitImage(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>importData()</slot>
@@ -686,5 +718,6 @@ Errors are indicated with a red squiggle underline.</string>
   <slot>editTextChanged()</slot>
   <slot>editModeChanged(int)</slot>
   <slot>setNull()</slot>
+  <slot>setFitImage(bool)</slot>
  </slots>
 </ui>

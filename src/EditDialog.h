@@ -48,6 +48,7 @@ private slots:
     void openPrintImageDialog();
     void copyHexAscii();
     void setWordWrapping(bool value);
+    void setFitImage(bool value);
 
 signals:
     void recordTextUpdated(const QPersistentModelIndex& idx, const QByteArray& bArrdata, bool isBlob);
